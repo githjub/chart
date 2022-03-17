@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui-v2.6.0/css/layui.css">
+    <script src="https://www.layuicdn.com/layui-v2.6.0/layui.js"></script>
+</head>
+<body>
+<div class="container">
+        <div class="contentbox contentboxleft">
+            <!-- 树状图 -->
+            <div id="tree1"></div>
+        </div>
+        <div class="contentbox contentboxright">
+                    <div id="tree2"></div>
+        </div>
+</div>
+
+
+
+    <script>
+        layui.use('tree', function(){
+            var tree = layui.tree;
+
+            //渲染
+            var inst1 = tree.render({
+                elem: '#tree1'  //绑定元素
+                ,click: function(obj){
+                    // console.log(obj.data); //得到当前点击的节点数据
+                    // console.log(obj.state); //得到当前节点的展开状态：open、close、normal
+                    // console.log(obj.elem); //得到当前节点元素
+
+                    // console.log(obj.data.children); //当前节点下是否有子节点
+                    if (null==obj.data.children){//点击事件
+                        console.log(obj.data); //得到当前点击的节点数据
+                        console.log(obj.data.title); //得到当前点击的节点数据
+                    }
+                }
+                // ,data: [{
+                //     id:"0"
+                //     ,value: '江西'
+                //     ,children: [{
+                //         id:"01"
+                //         ,title: '南昌' //二级菜单
+                //     }]
+                // },{
+                //     id:"1"
+                //     ,text: '陕西' //一级菜单
+                //     ,children: [{
+                //         id:"11"
+                //         ,title: '西安' //二级菜单
+                //     }]
+                // }]
+
+
+                ,data: [{
+
+                    "id":"001",
+
+                    "title": "湖南省",
+
+                    "last": false,
+
+                    "parentId": "0",
+
+                    "children":[{
+
+                        "id":"001001",
+
+                        "title": "长沙市",
+
+                        "last":true,
+
+                        "parentId": "001"
+
+                    },{
+
+                        "id":"001002",
+
+                        "title": "株洲市",
+
+                        "last":true,
+
+                        "parentId": "001"
+
+                    },{
+
+                        "id":"001003",
+
+                        "title": "湘潭市",
+
+                        "last":true,
+
+                        "parentId": "001"
+
+                    },{
+
+                        "id":"001004",
+
+                        "title": "衡阳市",
+
+                        "last":true,
+
+                        "parentId": "001"
+
+                    },{
+
+                        "id":"001005",
+
+                        "title": "郴州市",
+
+                        "last":true,
+
+                        "parentId": "001"
+
+                    }]
+
+                },{
+
+                    "id":"002",
+
+                    "title": "湖北省",
+
+                    "last": false,
+
+                    "parentId": "0",
+
+                    "children":[{
+
+                        "id":"002001",
+
+                        "title": "武汉市",
+
+                        "last":true
+
+                    },{
+
+                        "id":"002002",
+
+                        "title": "黄冈市",
+
+                        "last":true,
+
+                        "parentId": "002"
+
+                    },{
+
+                        "id":"002003",
+
+                        "title": "潜江市",
+
+                        "last":true,
+
+                        "parentId": "002"
+
+                    },{
+
+                        "id":"002004",
+
+                        "title": "荆州市",
+
+                        "last":true,
+
+                        "parentId": "002"
+
+                    },{
+
+                        "id":"002005",
+
+                        "title": "襄阳市",
+
+                        "last":true,
+
+                        "parentId": "002"
+
+                    }]
+                }]
+
+            });
+        });
+    </script>
+</body>
+<style>
+    .container {
+        width: 100%;
+        height: 100vh;
+        background-color: #EEEEEE;
+    }
+    .contentboxleft {
+        margin-left: 3%;
+        width: 15%;
+    }
+    .contentboxright {
+        margin-left: 3%;
+        margin-right: 3%;
+        width: 70%;
+    }
+    .contentbox {
+        height: 80vh;
+        background-color: white;
+        display: inline-block;
+        vertical-align: top;//水平对齐方式:顶部对齐
+        box-sizing: content-box;
+        margin-top: 3%;
+        margin-bottom: 5%;
+        padding-top: 20px;
+        padding-left: 20px;
+        border-radius: 20px;
+        box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
+</html>

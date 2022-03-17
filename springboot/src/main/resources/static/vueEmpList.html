@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+
+<body>
+<div id="vueContainer">
+    <table border="1px" width="800">
+        <tr>
+            <th>员工编号</th>
+            <th>姓名</th>
+            <th>岗位</th>
+            <th>工资</th>
+            <th>照片</th>
+            <th colspan="2" >操作</th>
+        </tr>
+        <tbody>
+
+        <tr v-for="(emp,index) in JsonResultBean.data.list" v-bind:key="emp.empno">
+            <th>{{emp.empno}}</th>
+            <th>{{emp.ename}}</th>
+            <th>{{emp.job}}</th>
+            <th>{{emp.sal}}</th>
+            <th>{{emp.photo}}</th>
+            <th><button @click="deleteRow(emp.empno)">删除</button></th>
+            <th><button @click="selectedRow(index)">修改</button></th>
+        </tr>
+
+        </tbody>
+
+        <tfoot>
+        <tr>
+            <td colspan="6" align="right">
+                <a href="javaScript:" @click="pageNum-=1" >上一页</a>
+                <a href="javaScript:" @click="pageNum+=1" >下一页</a>
+                总页数:<span>{{JsonResultBean.data.pages}}</span>
+                当前第:<span>{{pageNum}}</span>
+                每页显示的记录数:
+                <select v-model="pageSize">
+                    <option>5</option>
+                    <option>10</option>
+                    <option>15</option>
+                </select><br/>
+
+                总记录数:<span>{{JsonResultBean.data.total}}</span>
+            </td>
+        </tr>
+
+        </tfoot>
+    </table>
+
+    <form>
+        <label>员工编号</label>
+        <input type="text" v-model="updateEmpList.empno"><br/>
+        <label>姓   名</label>
+        <input type="text" v-model="updateEmpList.ename"><br/>
+        <label>岗   位</label>
+        <input type="text" v-model="updateEmpList.job"><br/>
+        <label>工   资</label>
+        <input type="text" v-model="updateEmpList.sal"><br/>
+        <button @click="selectedRow(updateEmpList)">修改</button>
+    </form>
+
+
+</div>
+</body>
+</html>
+<script src="js/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script type="text/javascript">
+    var vm = new Vue({
+        el:"#vueContainer",
+        data:{
+            updateEmpList:{
+                empno:7788,
+                ename:'scott',
+                job:'clark',
+                sal:'9999'
+            },
+            pageNum:1,
+            pageSize:10,
+            deptName:'',
+            JsonResultBean:{
+                data:{},
+                code:'0',
+                msg:''
+            }
+        },
+        watch:{
+            pageSize:function () {
+                this.pageNum=1
+                this.loadEmpList();
+            },
+            pageNum:function (newVal,oldval) {
+                if (newVal<1){
+                    this.pageNum=1
+                }
+                if (newVal>this.JsonResultBean.data.pages){
+                    this.pageNum=this.JsonResultBean.data.pages
+                }
+                if (newVal!=0){
+
+                    this.loadEmpList();
+                }
+
+            }
+        },
+        //页面打开就要查询所有员工信息
+        mounted:function(){
+            this.loadEmpList();
+
+        },
+        methods:{
+            selectedRow:function (index) {
+                // this.updateEmpList=this.JsonResultBean.data.list[index];
+                var empObj = this.JsonResultBean.data.list[index];
+                this.updateEmpList.empno=empObj.empno;
+                this.updateEmpList.ename=empObj.ename;
+                this.updateEmpList.job=empObj.job;
+                this.updateEmpList.sal=empObj.sal;
+            },
+            updateRow:function (empBean) {
+                console.log('dianjile')
+                var _this = this;
+                axios.get("empAction/update",{params:{"empBean":empBean}})
+                    .then(function (serverData) {
+                        //console.log("Ajax请求里的this:"+this)
+
+                        console.log("服务端返回结果:",serverData)
+                        if (serverData.status==200){
+                            if (  serverData.data.code==0){
+                                //
+                                //_this.loadEmpList();//重新加载数据库中的数据
+
+                            }else{
+                                alert(serverData.data.msg);
+                            }
+                        }
+
+                    }).catch(function (error) {
+                    console.log("错误消息:",error)
+                })
+            },
+            deleteRow:function (empno) {
+                console.log('dianjile')
+                var _this = this;
+                axios.get("empAction/delete",{params:{"empno": empno}})
+                    .then(function (serverData) {
+                        //console.log("Ajax请求里的this:"+this)
+
+                        console.log("服务端返回结果:",serverData)
+                        if (serverData.status==200){
+                            if (  serverData.data.code==0){
+                                //
+                                _this.loadEmpList();//重新加载数据库中的数据
+
+                            }else{
+                                alert(serverData.data.msg);
+                            }
+                        }
+
+                    }).catch(function (error) {
+                    console.log("错误消息:",error)
+                })
+            },
+            loadEmpList:function () {
+                //pageNum:pageNum,pageSize:5
+                // console.log("mounted里的this:"+this)
+                var _this = this
+
+                axios.get("empAction/queryByPage",{params:{pageSize: _this.pageSize,pageNum: _this.pageNum}})
+                    .then(function (serverData) {
+                        //console.log("Ajax请求里的this:"+this)
+
+                        console.log("服务端返回结果:",serverData)
+                        if (serverData.status==200){
+                            _this.JsonResultBean = serverData.data
+                        }
+
+                    }).catch(function (error) {
+                    console.log("错误消息:",error)
+                })
+            }
+        }
+    })
+</script>

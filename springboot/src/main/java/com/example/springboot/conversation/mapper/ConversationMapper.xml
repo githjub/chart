@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.springboot.conversation.mapper.ConversationMapper" >
+  <resultMap id="BaseResultMap" type="com.example.springboot.bean.Conversation" >
+    <constructor >
+      <arg column="nick_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="count_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="latest_message" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="latest_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="headImg" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    nick_name, count_id, latest_message, latest_time, headImg
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.springboot.bean.ConversationExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from conversation
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.example.springboot.bean.ConversationExample" >
+    delete from conversation
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.example.springboot.bean.Conversation" >
+    insert into conversation (nick_name, count_id, latest_message, 
+      latest_time, headImg)
+    values (#{nickName,jdbcType=VARCHAR}, #{countId,jdbcType=VARCHAR}, #{latestMessage,jdbcType=VARCHAR}, 
+      #{latestTime,jdbcType=TIMESTAMP}, #{headimg,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.springboot.bean.Conversation" >
+    insert into conversation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="nickName != null" >
+        nick_name,
+      </if>
+      <if test="countId != null" >
+        count_id,
+      </if>
+      <if test="latestMessage != null" >
+        latest_message,
+      </if>
+      <if test="latestTime != null" >
+        latest_time,
+      </if>
+      <if test="headimg != null" >
+        headImg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="nickName != null" >
+        #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="countId != null" >
+        #{countId,jdbcType=VARCHAR},
+      </if>
+      <if test="latestMessage != null" >
+        #{latestMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="latestTime != null" >
+        #{latestTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="headimg != null" >
+        #{headimg,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.example.springboot.bean.ConversationExample" resultType="java.lang.Integer" >
+    select count(*) from conversation
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update conversation
+    <set >
+      <if test="record.nickName != null" >
+        nick_name = #{record.nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.countId != null" >
+        count_id = #{record.countId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.latestMessage != null" >
+        latest_message = #{record.latestMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="record.latestTime != null" >
+        latest_time = #{record.latestTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.headimg != null" >
+        headImg = #{record.headimg,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update conversation
+    set nick_name = #{record.nickName,jdbcType=VARCHAR},
+      count_id = #{record.countId,jdbcType=VARCHAR},
+      latest_message = #{record.latestMessage,jdbcType=VARCHAR},
+      latest_time = #{record.latestTime,jdbcType=TIMESTAMP},
+      headImg = #{record.headimg,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <select id="selectConversation" resultType="map">
+    SELECT * FROM conversation
+  </select>
+</mapper>
